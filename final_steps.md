@@ -106,9 +106,9 @@ among the 5,000 explored markings; the full space was not enumerated — say it 
 
 ## 3. Drive the reviewed net (seconds each)
 
-Parameters: only `invoke_apply` needs one (`validation_result`, rule R43). `rejected` below is the
-second value of `VALIDATION_RESULT` in your YAML's `data:` section — check it; if yours is named
-differently, use yours. Actions whose parameters you omit take any value.
+Parameters: only `invoke_apply` needs one (`validation_result`, rule R43). Its two values in your
+YAML's `data:` section are `accepted` and `none_accepted` (the net knows only the declared values).
+Actions whose parameters you omit take any value.
 
 Full pipeline run — every line ALLOW, then DONE (verified output):
 
@@ -150,7 +150,7 @@ finished: True
 Violations (verified output; notes in parentheses are not printed):
 
 ```powershell
-python examples/drive.py out/orchestrator invoke_trigger_detection write_configuration write_configuration confirm_configuration create_memory_log invoke_trigger_detection invoke_impact_analysis append_memory_entry load_session_state invoke_apply:validation_result=accepted select_apply_candidate invoke_apply:validation_result=rejected perform_stage_work summarize_run_to_user
+python examples/drive.py out/orchestrator invoke_trigger_detection write_configuration write_configuration confirm_configuration create_memory_log invoke_trigger_detection invoke_impact_analysis append_memory_entry load_session_state invoke_apply:validation_result=accepted select_apply_candidate invoke_apply:validation_result=none_accepted perform_stage_work summarize_run_to_user
 ```
 
 ```
@@ -166,7 +166,7 @@ R39 | BLOCK invoke_impact_analysis                        (trigger_detection fir
 R8 | BLOCK load_session_state                             (the user was not asked)
 R47 | BLOCK invoke_apply{'validation_result': 'accepted'} (no candidate selected)
 - | ALLOW select_apply_candidate
-R43 | BLOCK invoke_apply{'validation_result': 'rejected'} (validation did not accept)
+R43 | BLOCK invoke_apply{'validation_result': 'none_accepted'} (validation did not accept)
 R26 | BLOCK perform_stage_work                            (forbidden: the orchestrator does no stage work)
 - | ALLOW summarize_run_to_user
 - | ALLOW END
